@@ -1,0 +1,68 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+apply plugin: 'com.github.dcendents.android-maven'
+//当前仓库版本
+def VERSION='1.2.9'
+//组
+def GROUP_ID="com.cz.netlibrary"
+//
+def ARTIFACT_ID="net-library"
+//仓库描述
+def DESCRIPTION="an android kotlin network library"
+//本地maven配置
+def MAVEN_URL='http://192.168.29.8:8081/repository/credit-wallet/'
+def USER="admin"
+def PASSWORD="admin123"
+//引入本地仓库位置
+allprojects {
+    repositories {
+        maven{
+            url MAVEN_URL
+        }
+    }
+}
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+task makeJar(type: Copy) {
+    delete 'build/libs/http.jar'
+    from('build/intermediates/bundles/release/')
+    into('build/libs/')
+    include('classes.jar')
+    rename ('classes.jar', 'http.jar')
+}
+
+task javadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    destinationDir = file("../javadoc/")
+    failOnError false
+}
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+//------------------------------
+uploadArchives {
+    configuration = configurations.archives
+    repositories {
+        mavenDeployer {
+            repository(url: MAVEN_URL) {
+                authentication(userName: USER, password: PASSWORD)
+            }
+            pom.project {
+                version VERSION
+                artifactId ARTIFACT_ID
+                groupId GROUP_ID
+                packaging "aar"
+                description DESCRIPTION
+            }
+        }
+    }
+}
