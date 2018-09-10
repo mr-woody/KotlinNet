@@ -137,7 +137,14 @@ class OkHttp3ClientImpl : BaseRequestClient<Response,OkHttpClient>() {
         }
         HttpLog.log { append("请求url:$url \n") }
         //add extras param
-        requestConfig.requestExtrasCallback?.invoke(item)?.let {  item.params.putAll(it) }
+        requestConfig.requestExtrasCallback?.invoke(item)?.let {
+            val params:(MutableMap<String, Any?>) = mutableMapOf()
+            params.putAll(it)
+            if(null!=item.params && item.params.isNotEmpty()){
+                params.putAll(item.params)
+            }
+            item.params=params
+        }
         var request=when(item.method){
             RequestMethod.post, RequestMethod.put-> getMultipartRequest(tag,url,item)
             RequestMethod.get,RequestMethod.delete->getGetByDeleteRequest(tag,url,item)
