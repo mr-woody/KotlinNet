@@ -22,18 +22,18 @@ class HttpRequestConfig {
     var retryOnConnectionFailure=false //异常重试
     var interceptItems:Array<Interceptor>?=null//额外的拦截器
     internal var clientCreateCallback:((OkHttpClient.Builder)->Unit)?=null
-    internal var requestExtrasCallback:((RequestConfig)->MutableMap<String,Any?>)?=null //附加参数
-    internal var requestHeaderCallback:(()->MutableMap<String,String>)?=null //附加头信息
+    internal var requestExtrasCallback:((RequestConfig)->MutableMap<String,Any?>?)?=null //附加参数
+    internal var requestHeaderCallback:(()->MutableMap<String,String>?)?=null //附加头信息
     internal var requestErrorCallback:((Int,String?,String?)->HttpException)?=null
     internal var networkInterceptor:(RequestConfig.()->Boolean)?=null
 
     fun clientCreateCallback(callback:(OkHttpClient.Builder)->Unit){
         this.clientCreateCallback=callback
     }
-    fun requestExtrasCallback(callback:(RequestConfig)->MutableMap<String,Any?>){
+    fun requestExtrasCallback(callback:(RequestConfig)->MutableMap<String,Any?>?){
         this.requestExtrasCallback =callback
     }
-    fun requestHeaderCallback(callback:()->MutableMap<String,String>){
+    fun requestHeaderCallback(callback:()->MutableMap<String,String>?){
         this.requestHeaderCallback =callback
     }
     //网络拦截器
