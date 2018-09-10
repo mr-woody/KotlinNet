@@ -10,6 +10,7 @@ class DeleteRequest{
     var method=RequestMethod.delete
     var info:String?=null
     var url:String=String()
+    var encode:Boolean=true
     var pathValue:Array<String>?=null
     var params:Map<String,Any?>?=null
     var header:Map<String,String>?=null

@@ -9,6 +9,7 @@ class GetRequest{
     var method=RequestMethod.get
     var info:String?=null
     var url:String=String()
+    var encode:Boolean=true
     var pathValue:Array<String>?=null
     var params:Map<String,String>?=null
     var header:Map<String,String>?=null

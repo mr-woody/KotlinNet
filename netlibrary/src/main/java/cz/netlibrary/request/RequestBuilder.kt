@@ -54,6 +54,7 @@ class RequestBuilder<T>{
         config.info=request.info
         config.url=request.url
         config.method=request.method
+        config.encode=request.encode
         request.params?.let { config.params.putAll(it) }
         request.header?.let { config.header.putAll(it) }
         request.pathValue?.let { config.pathValue.addAll(it) }
@@ -76,6 +77,7 @@ class RequestBuilder<T>{
         val request = DeleteRequest().apply(closure)
         config.info=request.info
         config.url=request.url
+        config.encode=request.encode
         config.method=request.method
         request.params?.let { config.params.putAll(it) }
         request.header?.let { config.header.putAll(it) }

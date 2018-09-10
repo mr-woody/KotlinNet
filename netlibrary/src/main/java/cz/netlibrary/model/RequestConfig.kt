@@ -7,6 +7,7 @@ class RequestConfig{
     var action:String?=null
     var method = RequestMethod.get
     var url:String=String()
+    var encode:Boolean=true
     var info:String?=null
     var pathValue = mutableListOf<String>()
     var entity:((MutableMap<String, Any?>)->Pair<String,String>)?=null
