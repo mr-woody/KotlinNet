@@ -45,6 +45,7 @@ fun<T> getRequestItem(action:String?,request: RequestBuilder<T>.()->Unit): Reque
             } else {
                 append("获取网络配置模块:$action-----------------------\n")
                 append("\turl:${requestItem?.url}\n")
+                append("\tencode:${requestItem?.encode}\n")
                 append("\tinfo:${requestItem?.info}\n")
                 append("\tmethod:${requestItem?.method}\n")
                 append("\tparams:[${requestItem?.params?.joinToString { it }}]\n")
@@ -59,6 +60,7 @@ fun<T> getRequestItem(action:String?,request: RequestBuilder<T>.()->Unit): Reque
         //请求网络
         config.info=requestItem.info
         config.url=requestItem.url
+        config.encode=requestItem.encode
         config.method=requestItem.method
         config.info=requestItem.info
         //设置插值
@@ -83,6 +85,7 @@ fun<T> getRequestItem(action:String?,request: RequestBuilder<T>.()->Unit): Reque
     HttpLog.log{
         append("请求信息:${String.format(config.url,config.pathValue)}-----------------\n")
         append("\turl:${config.url}\n")
+        append("\tencode:${requestItem?.encode}\n")
         append("\tinfo:${config.info}\n")
         append("\tmethod:${config.method}\n")
         append("\tpathValue:${config.pathValue}\n")

@@ -185,7 +185,7 @@ class OkHttp3ClientImpl : BaseRequestClient<Response,OkHttpClient>() {
      * 获取一个get/delete请求对象
      */
     private fun getGetByDeleteRequest(tag: String?,url:StringBuilder,item: RequestConfig):Request{
-        url.append(item.params.map {it.key.to(if(item.encode) URLEncoder.encode(it.value as String?,"utf-8")  else it.value) }.joinToString("&") { "${it.first}=${it.second}"})
+        url.append(item.params.map {it.key.to(if(item.encode) URLEncoder.encode(it.value.toString(),"utf-8")  else it.value) }.joinToString("&") { "${it.first}=${it.second}"})
         val requestBuilder = Request.Builder().url(url.toString())
         if(null!=requestBuilder){
             when(item.method){
