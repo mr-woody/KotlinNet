@@ -11,6 +11,7 @@ import cz.netlibrary.requestConfig
 import okhttp3.*
 import java.io.File
 import java.io.IOException
+import java.net.URLConnection
 import java.net.URLEncoder
 
 /**
@@ -170,8 +171,15 @@ class OkHttp3ClientImpl : BaseRequestClient<Response,OkHttpClient>() {
                     if(it !is File){
                         builder.addFormDataPart(key,value.toString())
                     } else {
-                        requestBody = RequestBody.create(STREAM, key)
-                        builder.addFormDataPart(key, it.name, requestBody)
+                        /**
+                         * 上传文件格式
+                         */
+                        //根据文件的后缀名，获得文件类型
+                        val fileType = getMimeType(it.name)
+                        builder.addFormDataPart( //给Builder添加上传的文件
+                                key,  //请求的名字
+                                it.name, //文件的文字，服务器端用来解析的
+                                RequestBody.create(MediaType.parse(fileType), it)) //创建RequestBody，把上传的文件放入
                     }
                 }
             }
@@ -189,10 +197,25 @@ class OkHttp3ClientImpl : BaseRequestClient<Response,OkHttpClient>() {
     }
 
     /**
+     * 获取文件MimeType
+     *
+     * @param filename 文件名
+     * @return
+     */
+    private fun getMimeType(filename: String): String {
+        val filenameMap = URLConnection.getFileNameMap()
+        var contentType = filenameMap.getContentTypeFor(filename)
+        if (contentType == null) {
+            contentType = "application/octet-stream" //* exe,所有的可执行程序
+        }
+        return contentType
+    }
+
+    /**
      * 获取一个get/delete请求对象
      */
     private fun getGetByDeleteRequest(tag: String?,url:StringBuilder,item: RequestConfig):Request{
-        url.append(item.params.map {it.key.to(if(item.encode) URLEncoder.encode(it.value.toString(),"utf-8")  else it.value) }.joinToString("&") { "${it.first}=${it.second}"})
+        url.append(item.params.map {it.key.to(if(item.encode) URLEncoder.encode(it.value.toString(),"UTF-8")  else it.value) }.joinToString("&") { "${it.first}=${it.second}"})
         val requestBuilder = Request.Builder().url(url.toString())
         if(null!=requestBuilder){
             when(item.method){

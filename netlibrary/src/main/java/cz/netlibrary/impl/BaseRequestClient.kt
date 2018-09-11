@@ -21,7 +21,6 @@ abstract class BaseRequestClient<out T,C> {
     companion object {
         val JSON = MediaType.parse("application/json; charset=utf-8")
         val TEXT = MediaType.parse("Content-Type application/x-www-form-")
-        val STREAM = MediaType.parse("application/octet-stream")
         val httpClient: OkHttpClient
         init {
             val interceptor = Interceptor { chain ->
