@@ -54,7 +54,7 @@ fun<T> getRequestItem(action:String?,request: RequestBuilder<T>.()->Unit): Reque
         }
     }
     val requestBuilder = RequestBuilder<T>().apply(request)
-    val config=requestBuilder.config
+    var config=requestBuilder.config
     config.action=action
     if(null!=requestItem){
         //请求网络
@@ -63,25 +63,31 @@ fun<T> getRequestItem(action:String?,request: RequestBuilder<T>.()->Unit): Reque
         config.encode=requestItem.encode
         config.method=requestItem.method
         config.info=requestItem.info
-        //设置插值
-        requestBuilder.pathValue?.let { config.pathValue.addAll(it) }
-        //设置entity
-        requestBuilder.entity?.let { requestBuilder.config.entity= it }
+
         //合并模板参数与值
         if(requestItem.params.size==requestBuilder.params.size){
-            println(requestBuilder.config.params)
+            println(config.params)
             requestItem.params.zip(requestBuilder.params).
                     filter { null!=it.second }.
                     forEach { (first, second) -> config.params[first]=second  }
         }
-        //附加参数,并过滤掉值为空的参数
-        requestBuilder.ext?.let { config.params.putAll(it.filterValues { null!=it }) }
     }
     //添加配置header
     val headers=requestBuilder.headers
     if(null!=headers){
         config.header.putAll(headers)
     }
+
+    //设置插值
+    requestBuilder.pathValue?.let { config.pathValue.addAll(it) }
+    //设置entity
+    requestBuilder.entity?.let { config.entity= it }
+
+    //附加参数,并过滤掉值为空的参数
+    requestBuilder.ext?.let { config.params.putAll(it.filterValues { null!=it }) }
+    //过滤掉值为空的参数
+    config.params= config.params.filterValues{ null!=it }?.toMutableMap()
+
     HttpLog.log{
         append("请求信息:${String.format(config.url,config.pathValue)}-----------------\n")
         append("\turl:${config.url}\n")
