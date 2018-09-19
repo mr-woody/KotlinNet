@@ -41,7 +41,7 @@ class GetActivity : AppCompatActivity() {
         request<String> {
             get {
                 url="v1/weather/query?"
-                params= mutableMapOf("key" to APP_KEY,"city" to null,"province" to "北京")
+                params= mutableMapOf("key" to APP_KEY,"city" to "通州","province" to "北京")
             }
             ext = mutableMapOf("ext_key" to "ext_APP_KEY","ext_city" to "ext_通州","ext_province" to "ext_北京")
             lifeCycle{
