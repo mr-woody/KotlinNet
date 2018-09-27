@@ -100,7 +100,7 @@ class RequestBuilder<T>{
     //过滤信息
     fun map(map: ((String?) -> T?)){
         this.handler.map=object :FilterResult<T?>{
-            override fun call(result: String)=map(result)
+            override fun call(result: String?)=map(result)
         }
     }
 
