@@ -98,14 +98,14 @@ class RequestBuilder<T>{
 
 
     //过滤信息
-    fun map(map: ((String) -> T)){
-        this.handler.map=object :FilterResult<T>{
+    fun map(map: ((String) -> T?)){
+        this.handler.map=object :FilterResult<T?>{
             override fun call(result: String)=map(result)
         }
     }
 
     //扩展式的数据过滤
-    fun map(callback: FilterResult<T>){
+    fun map(callback: FilterResult<T?>){
         this.handler.map=callback
     }
 
