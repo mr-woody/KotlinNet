@@ -10,8 +10,8 @@ import cz.netlibrary.exception.HttpException
  */
 class RequestHandler<T>{
     var map: FilterResult<T>? = null
-    var success: ((T) -> Unit)?=null
-    var successCallback: RequestSuccessCallback<T>?=null
+    var success: ((T?) -> Unit)?=null
+    var successCallback: RequestSuccessCallback<T?>?=null
     var failedCallback: RequestFailCallback?=null
     var failed: ((HttpException) -> Unit)?=null
     var noNetWork:()->Unit={}

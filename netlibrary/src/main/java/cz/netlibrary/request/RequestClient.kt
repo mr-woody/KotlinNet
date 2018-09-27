@@ -63,7 +63,7 @@ object RequestClient{
                         HttpLog.log { append("空数据$result\n") }
                         executeOnThread { callFailed(OPERATION_FAILED,errorMessage?:"请求没有结果!") }
                     } else {
-                        var item: T?=null
+                        var item: T?
                         try{
                             item = handler.map?.call(convertValue)
                         } catch (e:Exception){
@@ -77,24 +77,15 @@ object RequestClient{
                             }
                             return@executeOnError
                         }
-                        if(null==item){
-                            executeOnThread {
-                                HttpLog.log { append("数据处理失败$result -> map:${handler.map}!\n") }
-                                callFailed(OPERATION_FAILED,errorMessage?:"数据处理失败!")
-                            }
+                        HttpLog.log { append("数据处理:${item?.toString()}\n") }
+                        //回调处理结果
+                        if (!contextCondition.invoke()) {
+                            lifeCycleCall(RequestLifeCycle.CANCEL)
                         } else {
-                            HttpLog.log { append("数据处理:${item?.toString()}\n") }
-                            //回调处理结果
-                            if (!contextCondition.invoke()) {
-                                lifeCycleCall(RequestLifeCycle.CANCEL)
-                            } else {
-                                HttpLog.log { append("回调线程:$mainThread\n") }
-                                executeOnThread {
-                                    item?.let {
-                                        handler.success?.invoke(it)
-                                        handler.successCallback?.onSuccess(it)
-                                    }
-                                }
+                            HttpLog.log { append("回调线程:$mainThread\n") }
+                            executeOnThread {
+                                handler.success?.invoke(item)
+                                handler.successCallback?.onSuccess(item)
                             }
                         }
                     }

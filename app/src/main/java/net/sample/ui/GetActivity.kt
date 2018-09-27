@@ -55,8 +55,8 @@ class GetActivity : AppCompatActivity() {
                 SystemClock.sleep(2*1000)
                 it
             }
-            successItem=object :RequestSuccessCallback<String>{
-                override fun onSuccess(item: String) {
+            successItem=object :RequestSuccessCallback<String?>{
+                override fun onSuccess(item: String?) {
                     contentView.append("Done\n")
                 }
             }

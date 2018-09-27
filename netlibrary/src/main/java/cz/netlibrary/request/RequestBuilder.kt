@@ -24,7 +24,7 @@ class RequestBuilder<T>{
     internal var lifeCycleItem: LifeCycleCallback?=null
     internal var lifeCycleCondition:(()->Boolean)?=null
 
-    var successItem:RequestSuccessCallback<T>?=null
+    var successItem:RequestSuccessCallback<T?>?=null
         set(value) { handler.successCallback=value }
 
     var failedItem:RequestFailCallback?=null
@@ -110,7 +110,7 @@ class RequestBuilder<T>{
     }
 
     //完成回调
-    fun success(success: ((T) -> Unit)?=null){
+    fun success(success: ((T?) -> Unit)?=null){
         this.handler.success=success
     }
 
