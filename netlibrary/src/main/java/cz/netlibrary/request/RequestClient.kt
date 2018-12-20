@@ -50,13 +50,13 @@ object RequestClient{
         init {
             executeOnThread{ lifeCycleCall(RequestLifeCycle.START) }
         }
-        override fun onSuccess(response: Response, code: Int, result: String, time: Long) {
+        override fun onSuccess(response: Response?, code: Int, result: String, time: Long) {
             if(!contextCondition.invoke()){
                 lifeCycleCall(RequestLifeCycle.CANCEL)
             } else {
                 lifeCycleCall(RequestLifeCycle.BEFORE_CALL)
                 executeOnError {
-                    HttpLog.log { append("请求成功:${response.request().url()}") }
+                    HttpLog.log { append("请求成功:${response?.request()?.url()}") }
                     //此处requestSuccessCallback可将结果再做二次转换比如:{message:"" code:"",item:{}} 提取出item,再交给map转换
                     var convertValue=result
                     if(TextUtils.isEmpty(convertValue)){

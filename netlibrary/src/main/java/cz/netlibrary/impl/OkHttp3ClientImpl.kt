@@ -20,7 +20,7 @@ import java.net.URLEncoder
  */
 class OkHttp3ClientImpl : BaseRequestClient<Response,OkHttpClient>() {
 
-    val callItems= mutableMapOf<String,MutableList<Call>>()
+    private val callItems= mutableMapOf<String,MutableList<Call>>()
 
     override fun getHttpClient(): OkHttpClient = httpClient
     
