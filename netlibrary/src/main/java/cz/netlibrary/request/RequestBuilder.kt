@@ -39,6 +39,8 @@ class RequestBuilder<T>{
     var pathValue:Array<String>?=null
     //扩展请求entity
     var entity:((MutableMap<String, Any?>)->Pair<String,String>)?=null
+    var entityPair:Pair<String,String>?=null
+    var entityJson:String?=null
 
     fun lifeCycleItem(lifeCycleItem: LifeCycleCallback?=null,condition:(()->Boolean)?=null){
         this.lifeCycleItem=lifeCycleItem
@@ -67,6 +69,8 @@ class RequestBuilder<T>{
         config.url=request.url
         config.method=request.method
         config.entity=request.entity
+        config.entityPair=request.entityPair
+        config.entityJson=request.entityJson
         request.params?.let { config.params.putAll(it) }
         request.header?.let { config.header.putAll(it) }
         request.pathValue?.let { config.pathValue.addAll(it) }
@@ -91,6 +95,8 @@ class RequestBuilder<T>{
         config.url=request.url
         config.method=request.method
         config.entity=request.entity
+        config.entityPair=request.entityPair
+        config.entityJson=request.entityJson
         request.params?.let { config.params.putAll(it) }
         request.header?.let { config.header.putAll(it) }
         request.pathValue?.let { config.pathValue.addAll(it) }

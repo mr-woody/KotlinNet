@@ -82,6 +82,8 @@ fun<T> getRequestItem(action:String?,request: RequestBuilder<T>.()->Unit): Reque
     requestBuilder.pathValue?.let { config.pathValue.addAll(it) }
     //设置entity
     requestBuilder.entity?.let { config.entity= it }
+    requestBuilder.entityPair?.let { config.entityPair= it }
+    requestBuilder.entityJson?.let { config.entityJson= it }
 
     //附加参数,并过滤掉值为空的参数
     requestBuilder.ext?.let { config.params.putAll(it.filterValues { null!=it }) }
@@ -96,6 +98,8 @@ fun<T> getRequestItem(action:String?,request: RequestBuilder<T>.()->Unit): Reque
         append("\tmethod:${config.method}\n")
         append("\tpathValue:${config.pathValue}\n")
         append("\tentity:${config.entity?.toString()}\n")
+        append("\tentityPair:${config.entityPair?.toString()}\n")
+        append("\tentityJson:${config.entityJson}\n")
         append("\tparams:${config.params}\n")
         append("\theader:${config.header}\n")
         append("--------------------------------------------------------\n")

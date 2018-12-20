@@ -1,8 +1,5 @@
 package cz.netlibrary.model
 
-import cz.netlibrary.model.RequestMethod.get
-import cz.netlibrary.model.RequestMethod.post
-import cz.netlibrary.model.RequestMethod.put
 /**
  * Created by cz on 2017/6/7.
  */

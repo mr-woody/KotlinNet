@@ -161,9 +161,18 @@ class OkHttp3ClientImpl : BaseRequestClient<Response,OkHttpClient>() {
 
     private fun getMultipartRequest(tag: String?, url:StringBuilder, item: RequestConfig):Request{
         var requestBody: RequestBody?=null
-        val entity=item.entity?.invoke(item.params)
-        if (null != entity&&!TextUtils.isEmpty(entity.second)) {
-            requestBody = RequestBody.create(MediaType.parse(entity.first), entity.second)
+        if( null != item.entityJson ){
+            requestBody = RequestBody.create(JSON, item.entityJson)
+        }else if (null != item.entity) {
+            val entity= item.entity?.invoke(item.params)
+            if(null != entity) {
+                requestBody = RequestBody.create(MediaType.parse(entity.first), entity.second)
+            }
+        } else if(null != item.entityPair ){
+            val entity= item.entityPair
+            if(null != entity) {
+                requestBody = RequestBody.create(MediaType.parse(entity.first), entity.second)
+            }
         } else if(!item.params.isEmpty()){
             val builder = MultipartBody.Builder().setType(MultipartBody.FORM)
             item.params.forEach { (key,value)->

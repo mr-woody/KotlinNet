@@ -11,6 +11,8 @@ class RequestConfig{
     var info:String?=null
     var pathValue = mutableListOf<String>()
     var entity:((MutableMap<String, Any?>)->Pair<String,String>)?=null
+    var entityPair:Pair<String,String>?=null
+    var entityJson:String?=null
     var cookies= mutableMapOf<String,String>()
     var params= mutableMapOf<String,Any?>()
     var header= mutableMapOf<String,String>()
