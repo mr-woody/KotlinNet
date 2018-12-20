@@ -16,7 +16,7 @@ import okhttp3.Response
  * 请求执行客户端
  */
 object RequestClient{
-    val client= OkHttp3ClientImpl()
+    private val client= OkHttp3ClientImpl()
 
     /**
      * 获得请求对象
@@ -118,7 +118,7 @@ object RequestClient{
                 lifeCycleCall(RequestLifeCycle.FINISH)
             }
         }
-        fun callFailed(code:Int,message:String?,result:String?=null){
+        private fun callFailed(code:Int, message:String?, result:String?=null){
             var exception:HttpException
             if (null == requestErrorCallback) {
                 exception=HttpException(code, message)
@@ -131,7 +131,7 @@ object RequestClient{
         /**
          * 执行回调
          */
-        fun executeOnError(closure:()->Unit):Exception?{
+        private fun executeOnError(closure:()->Unit):Exception?{
             var error:Exception?=null
             if(abortOnError){
                 closure.invoke()
@@ -149,7 +149,7 @@ object RequestClient{
         /**
          * 执行回调,并根据mainThread标记,设定回调线程
          */
-        fun executeOnThread(closure:()->Unit){
+        private fun executeOnThread(closure:()->Unit){
             if(!mainThread||mainThread&&ContextHelper.mainThread==Thread.currentThread()){
                 executeOnError { closure.invoke() }?.apply { HttpLog.log { append("未知的执行异常:$message\n") } }
             } else if(mainThread){
@@ -160,7 +160,7 @@ object RequestClient{
         /**
          * 请求生命周期回调,确保在子线程回调
          */
-        fun lifeCycleCall(lifeCycle: RequestLifeCycle){
+        private fun lifeCycleCall(lifeCycle: RequestLifeCycle){
             val condition=requestItem.lifeCycleCondition
             if(null==condition||condition.invoke()){
                 ContextHelper.handler.post {
