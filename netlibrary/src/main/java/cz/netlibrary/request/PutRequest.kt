@@ -9,8 +9,8 @@ class PutRequest{
     var method = RequestMethod.put
     var info:String?=null
     var url:String=String()
-    var entity:((MutableMap<String, Any?>)->Pair<String,String>)?=null
-    var entityPair:Pair<String,String>?=null
+    var entity:((MutableMap<String, Any?>)->Pair<String,Any?>)?=null
+    var entityPair:Pair<String,Any?>?=null
     var entityJson:String?=null
     var pathValue:Array<String>?=null
     var params:Map<String,Any?>?=null

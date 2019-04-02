@@ -10,8 +10,8 @@ class RequestConfig{
     var encode:Boolean=true
     var info:String?=null
     var pathValue = mutableListOf<String>()
-    var entity:((MutableMap<String, Any?>)->Pair<String,String>)?=null
-    var entityPair:Pair<String,String>?=null
+    var entity:((MutableMap<String, Any?>)->Pair<String,Any?>)?=null
+    var entityPair:Pair<String,Any?>?=null
     var entityJson:String?=null
     var cookies= mutableMapOf<String,String>()
     var params= mutableMapOf<String,Any?>()

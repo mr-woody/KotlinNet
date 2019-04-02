@@ -9,6 +9,7 @@ import cz.netlibrary.model.RequestConfig
 import cz.netlibrary.model.RequestMethod
 import cz.netlibrary.requestConfig
 import okhttp3.*
+import okio.ByteString
 import java.io.File
 import java.io.IOException
 import java.net.URLConnection
@@ -159,20 +160,37 @@ class OkHttp3ClientImpl : BaseRequestClient<Response,OkHttpClient>() {
         return request
     }
 
+    private fun getRequestBody(entity: Pair<String,Any?>?):RequestBody?{
+        var requestBody: RequestBody?=null
+        if(entity?.second != null) {
+            requestBody = when(entity.second){
+                is ByteString ->{
+                    RequestBody.create(MediaType.parse(entity.first), entity.second as ByteString)
+                }
+                is ByteArray ->{
+                    RequestBody.create(MediaType.parse(entity.first), entity.second as ByteArray)
+                }
+                is File ->{
+                    RequestBody.create(MediaType.parse(entity.first), entity.second as File)
+                }
+                else -> {
+                    RequestBody.create(MediaType.parse(entity.first), entity.second as String)
+                }
+            }
+        }
+        return requestBody
+    }
+
     private fun getMultipartRequest(tag: String?, url:StringBuilder, item: RequestConfig):Request{
         var requestBody: RequestBody?=null
         if( null != item.entityJson ){
             requestBody = RequestBody.create(JSON, item.entityJson)
         }else if (null != item.entity) {
             val entity= item.entity?.invoke(item.params)
-            if(null != entity) {
-                requestBody = RequestBody.create(MediaType.parse(entity.first), entity.second)
-            }
+            requestBody = getRequestBody(entity)
         } else if(null != item.entityPair ){
             val entity= item.entityPair
-            if(null != entity) {
-                requestBody = RequestBody.create(MediaType.parse(entity.first), entity.second)
-            }
+            requestBody = getRequestBody(entity)
         } else if(!item.params.isEmpty()){
             val builder = MultipartBody.Builder().setType(MultipartBody.FORM)
             item.params.forEach { (key,value)->
@@ -224,7 +242,7 @@ class OkHttp3ClientImpl : BaseRequestClient<Response,OkHttpClient>() {
      * 获取一个get/delete请求对象
      */
     private fun getGetByDeleteRequest(tag: String?,url:StringBuilder,item: RequestConfig):Request{
-        url.append(item.params.map {it.key.to(if(item.encode) URLEncoder.encode(it.value.toString(),"UTF-8")  else it.value) }.joinToString("&") { "${it.first}=${it.second}"})
+        url.append(item.params.map { it.key to if(item.encode) URLEncoder.encode(it.value.toString(),"UTF-8")  else it.value }.joinToString("&") { "${it.first}=${it.second}"})
         val requestBuilder = Request.Builder().url(url.toString())
         if(null!=requestBuilder){
             when(item.method){

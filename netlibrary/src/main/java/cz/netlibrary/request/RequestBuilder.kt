@@ -34,12 +34,12 @@ class RequestBuilder<T>{
     //模板请求参数
     var params= arrayOf<Any?>()
     //附加参数集
-    var ext:MutableMap<String,String>?=null
+    var ext:MutableMap<String,Any?>?=null
     //模板插值
     var pathValue:Array<String>?=null
     //扩展请求entity
-    var entity:((MutableMap<String, Any?>)->Pair<String,String>)?=null
-    var entityPair:Pair<String,String>?=null
+    var entity:((MutableMap<String, Any?>)->Pair<String,Any?>)?=null
+    var entityPair:Pair<String,Any?>?=null
     var entityJson:String?=null
 
     fun lifeCycleItem(lifeCycleItem: LifeCycleCallback?=null,condition:(()->Boolean)?=null){
